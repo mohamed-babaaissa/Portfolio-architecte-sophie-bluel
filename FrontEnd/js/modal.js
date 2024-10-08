@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         modal.style.display = 'block';
+        modal.style.pointerEvents = 'auto';
+
         setTimeout(() => {
             modal.style.opacity = '1';
         }, 10);
@@ -23,9 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.removeAttribute('aria-hidden');
         modal.setAttribute('aria-modal', 'true');
 
-        focusables = Array.from(modal.querySelectorAll(focusableSelector));
-        previouslyFocusedElement = document.querySelector(':focus');
-        focusables[0].focus();
+        // focusables = Array.from(modal.querySelectorAll(focusableSelector));
+        // previouslyFocusedElement = document.querySelector(':focus');
+        // focusables[0].focus();
 
         // Bloque la fermeture si on clique à l'intérieur de la modale
         const stopElement = modal.querySelector('.js-modal-stop');
@@ -54,13 +56,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeModal = function (e) {
         // Vérifie si le clic est en dehors de la modale ou sur la croix
         if (!modal) return;
-        if (!e.target.closest('.modal-wrapper') || e.target.classList.contains('js-modal-close')) {
-            if (previouslyFocusedElement) {
-                previouslyFocusedElement.focus();
-            }
+        // if (!e.target.closest('.modal-wrapper') || e.target.classList.contains('js-modal-close')) {
+        //     if (previouslyFocusedElement) {
+        //         previouslyFocusedElement.focus();
+        //     }
 
             e.preventDefault();
+        
             modal.style.opacity = '0';
+            modal.style.pointerEvents = 'none'
             setTimeout(() => {
                 if (modal) {
                     modal.style.display = 'none';
@@ -81,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 stopElement.removeEventListener('click', stopPropagation);
             }
             modal = null;
-        }
+        // }
     };
 
     const stopPropagation = function (e) {
@@ -100,6 +104,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
