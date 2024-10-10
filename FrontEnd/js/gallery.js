@@ -11,7 +11,7 @@ async function fetchWorks() {
     }
 }
 
-// Fonction pour afficher les travaux dans la galerie
+// Fonction pour afficher les travaux dans la galerie avec un bouton "Supprimer" si connecté
 function displayWorks(item) {
     const gallery = document.querySelector('.gallery');
   
@@ -27,9 +27,65 @@ function displayWorks(item) {
     figure.appendChild(img);
     figure.appendChild(figcaption);
 
+    // Ajouter des icônes si l'utilisateur est connecté
+    const token = localStorage.getItem('token'); // Vérifier si l'utilisateur est connecté
+    if (token) {
+        const iconContainer = document.createElement('div');
+        iconContainer.classList.add('icon-container');
+        
+        // Icône "Modifier"
+        const editIcon = document.createElement('i');
+        editIcon.classList.add('fas', 'fa-edit', 'edit-icon');
+        editIcon.title = 'Modifier';
+        iconContainer.appendChild(editIcon);
+
+        // Icône "Supprimer"
+        const deleteIcon = document.createElement('i');
+        deleteIcon.classList.add('fas', 'fa-trash-alt', 'delete-icon');
+        deleteIcon.title = 'Supprimer';
+        deleteIcon.dataset.id = item.id;
+
+        // Ajouter l'événement de suppression
+        deleteIcon.addEventListener('click', async () => {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) {
+                await deleteWork(item.id); // Appeler la fonction de suppression
+                figure.remove(); // Retirer l'élément du DOM après suppression
+            }
+        });
+
+        iconContainer.appendChild(deleteIcon);
+
+        // Ajouter les icônes en haut à droite du projet
+        figure.appendChild(iconContainer);
+    }
+
     gallery.appendChild(figure);
 }
 
+// Fonction pour supprimer un travail via l'API
+async function deleteWork(id) {
+    const token = localStorage.getItem('token'); // Récupérer le token pour l'authentification
+    
+    try {
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`, // Ajouter l'en-tête d'authentification
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur lors de la suppression du projet');
+        }
+
+        console.log('Projet supprimé avec succès');
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+}
+
+// Fonction pour générer le menu de catégories
 function generateCategoryMenu(works) {
     const categoriesContainer = document.querySelector('.categories');
     
@@ -80,9 +136,7 @@ function generateCategoryMenu(works) {
         });
 
         categoriesContainer.appendChild(button);
-        
     });
-   
 }
 
 // Fonction pour afficher les travaux filtrés
@@ -153,6 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadWorks();
     updateAuthLink(); 
 });
+
+
+
 
 
 

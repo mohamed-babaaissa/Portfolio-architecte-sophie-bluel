@@ -1,13 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-    let modal = null;
-    let focusables = [];
-    let previouslyFocusedElement = null;
+    let modal = null; // Variable pour stocker la modale active
 
-    const focusableSelector = 'button, a, input, textarea';
-
-    // Ouvrir la modale
+    // Fonction pour ouvrir la modale
     const openModal = function (e) {
         e.preventDefault();
+        
+        // Récupération de la modale via l'attribut href de l'élément déclencheur
         modal = document.querySelector(e.target.getAttribute('href'));
 
         if (!modal) {
@@ -15,27 +13,29 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Gérer l'historique : Ajoute une nouvelle entrée dans l'historique sans recharger la page
+        history.pushState({ modalOpen: true }, null, window.location.href);
+
+        // Afficher la modale
         modal.style.display = 'block';
         modal.style.pointerEvents = 'auto';
 
+        // Appliquer un délai pour animer l'apparition de la modale
         setTimeout(() => {
             modal.style.opacity = '1';
         }, 10);
 
+        // Gestion des attributs d'accessibilité
         modal.removeAttribute('aria-hidden');
         modal.setAttribute('aria-modal', 'true');
 
-        // focusables = Array.from(modal.querySelectorAll(focusableSelector));
-        // previouslyFocusedElement = document.querySelector(':focus');
-        // focusables[0].focus();
-
-        // Bloque la fermeture si on clique à l'intérieur de la modale
+        // Empêche la fermeture si l'utilisateur clique à l'intérieur de la modale
         const stopElement = modal.querySelector('.js-modal-stop');
         if (stopElement) {
             stopElement.addEventListener('click', stopPropagation);
         }
 
-        // Fermer la modale via la croix ou en cliquant à l'extérieur
+        // Ajoute l'événement de fermeture de la modale au clic extérieur ou sur la croix
         modal.addEventListener('click', closeModal);
 
         const closeButton = modal.querySelector('.js-modal-close');
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
             closeButton.addEventListener('click', closeModal);
         }
 
-        // Gestion du bouton retour en arrière
+        // Gère le bouton retour en arrière (optionnel)
         const backButton = modal.querySelector('.back-button');
         if (backButton) {
             backButton.addEventListener('click', function() {
@@ -52,58 +52,75 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // Fermer la modale
+    // Fonction pour fermer la modale
     const closeModal = function (e) {
-        // Vérifie si le clic est en dehors de la modale ou sur la croix
+        // Vérifie si un événement est passé avant d'utiliser preventDefault
+        if (e && e.preventDefault) {
+            e.preventDefault(); // Empêche le comportement par défaut (si l'événement est fourni)
+        }
+
+        // Si aucune modale n'est ouverte, on quitte la fonction
         if (!modal) return;
-        // if (!e.target.closest('.modal-wrapper') || e.target.classList.contains('js-modal-close')) {
-        //     if (previouslyFocusedElement) {
-        //         previouslyFocusedElement.focus();
-        //     }
 
-            e.preventDefault();
-        
-            modal.style.opacity = '0';
-            modal.style.pointerEvents = 'none'
-            setTimeout(() => {
-                if (modal) {
-                    modal.style.display = 'none';
-                }
-            }, 300);
+        // Animation pour masquer la modale
+        modal.style.opacity = '0';
+        modal.style.pointerEvents = 'none';
 
-            modal.setAttribute('aria-hidden', 'true');
-            modal.removeAttribute('aria-modal');
-
-            modal.removeEventListener('click', closeModal);
-            const closeButton = modal.querySelector('.js-modal-close');
-            if (closeButton) {
-                closeButton.removeEventListener('click', closeModal);
+        // Cache la modale après un délai pour permettre l'animation
+        setTimeout(() => {
+            if (modal) {
+                modal.style.display = 'none';
             }
+        }, 300);
 
-            const stopElement = modal.querySelector('.js-modal-stop');
-            if (stopElement) {
-                stopElement.removeEventListener('click', stopPropagation);
-            }
-            modal = null;
-        // }
+        // Met à jour les attributs d'accessibilité
+        modal.setAttribute('aria-hidden', 'true');
+        modal.removeAttribute('aria-modal');
+
+        // Nettoie les événements associés à la modale
+        modal.removeEventListener('click', closeModal);
+
+        const closeButton = modal.querySelector('.js-modal-close');
+        if (closeButton) {
+            closeButton.removeEventListener('click', closeModal);
+        }
+
+        const stopElement = modal.querySelector('.js-modal-stop');
+        if (stopElement) {
+            stopElement.removeEventListener('click', stopPropagation);
+        }
+
+        // Réinitialise la variable modale
+        modal = null;
     };
 
+    // Empêche la propagation des événements de clic à l'extérieur de la modale
     const stopPropagation = function (e) {
-        e.stopPropagation();  
+        e.stopPropagation();
     };
 
-    // Ajouter des événements pour tous les éléments qui ouvrent la modale
+    // Attache l'événement d'ouverture de modale à tous les éléments ayant la classe 'js-modal'
     document.querySelectorAll('.js-modal').forEach(a => {
         a.addEventListener('click', openModal);
     });
 
-    // Gestion de la fermeture de la modale avec la touche Escape
+    // Gère la fermeture de la modale avec la touche 'Escape'
     window.addEventListener('keydown', function (e) {
         if ((e.key === 'Escape' || e.key === 'Esc') && modal) {
             closeModal(e);
         }
     });
+
+    // Gère le retour en arrière (popstate) pour fermer la modale si elle est ouverte
+    window.addEventListener('popstate', function (e) {
+        if (modal) {
+            closeModal(); // Ferme la modale si l'utilisateur utilise le bouton retour
+        }
+    });
 });
+
+
+
 
 
 
