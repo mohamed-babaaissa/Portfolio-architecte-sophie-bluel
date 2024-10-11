@@ -1,4 +1,9 @@
-/* stylelint-disable CssSyntaxError */
+/* 
+  ================
+  RESET CSS DE BASE
+  ================
+  Réinitialisation des styles pour avoir une base cohérente entre tous les navigateurs
+*/
 
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -25,73 +30,94 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
+
+/* HTML5 display-role reset pour les anciens navigateurs */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 }
+
 ol, ul {
 	list-style: none;
 }
+
 blockquote, q {
 	quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-/** end reset css**/
+
+
+/* 
+  ================
+  STYLES DE BASE DU SITE
+  ================
+*/
+
 body {
 	max-width: 1140px;
-	margin:auto;
-	font-family: 'Work Sans' ;
+	margin: auto;
+	font-family: 'Work Sans';
 	font-size: 14px;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
-}
-section {
-	margin: 50px 0
+	margin: 50px 0;
 }
 
-h1{
+section {
+	margin: 50px 0;
+}
+
+h1 {
 	display: flex;
 	flex-direction: column;
 	font-family: 'Syne';
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: #B1663C;
 }
 
 h1 > span {
 	font-family: 'Work Sans';
-	font-size:10px;
+	font-size: 10px;
 	letter-spacing: 0.1em;
-;
 }
 
-h2{
+h2 {
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: #1D6154;
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
+
+
+/* 
+  ================
+  STYLES DE NAVIGATION ET DES BOUTONS
+  ================
+*/
 
 .edit-button {
 	font-size: 10px;
@@ -108,11 +134,9 @@ nav ul {
 	margin-right: 5px;
 }
 
-
 .edit-button:hover {
 	color: #B1663C; /* Change la couleur du texte au survol */
 }
-
 
 nav li {
 	padding: 0 10px;
@@ -123,13 +147,22 @@ li:hover {
 	color: #B1663C;
 }
 
+
+/* 
+  ================
+  STYLES DE LA SECTION INTRODUCTION
+  ================
+*/
+
 #introduction {
 	display: flex;
 	align-items: center;
 }
+
 #introduction figure {
-	flex: 1
+	flex: 1;
 }
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -137,8 +170,9 @@ li:hover {
 }
 
 #introduction article {
-	flex: 1
+	flex: 1;
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -146,62 +180,61 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+
+/* 
+  ================
+  STYLES DE LA SECTION PORTFOLIO
+  ================
+*/
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
 }
 
-/* Styles pour les boutons de filtres */
+
+/* 
+  ================
+  STYLES DES BOUTONS DE FILTRES
+  ================
+*/
+
 .categories {
 	display: flex;
 	justify-content: center;
-	gap: 15px; 
+	gap: 15px;
 	margin-bottom: 20px;
 }
 
-/* Style pour les boutons de filtres */
 .categories button {
 	background-color: transparent;
-	border: 2px solid #1D6154; 
-	color: #1D6154; 
+	border: 2px solid #1D6154;
+	color: #1D6154;
 	font-family: 'Work Sans', sans-serif;
 	font-size: 1.1em;
 	padding: 10px 20px;
-	border-radius: 50px; 
+	border-radius: 50px;
 	cursor: pointer;
-	transition: all 0.3s ease; 
+	transition: all 0.3s ease;
 }
 
-/* Changement de style au survol */
 .categories button:hover {
-	background-color: #1D6154; 
-	color: white; 
+	background-color: #1D6154;
+	color: white;
 }
 
-/* Style pour le bouton actif */
 .categories button.active {
-	background-color: #1D6154; /* Couleur de fond */
-	color: white; /* Couleur du texte */
-}
-
-/* Style pour le bouton "Supprimer" */
-.delete-button {
-	background-color: transparent;
-	border: 2px solid #1D6154; 
-	color: #1D6154; 
-	font-family: 'Work Sans', sans-serif;
-	font-size: 1.1em;
-	padding: 10px 20px;
-	border-radius: 50px; 
-	cursor: pointer;
-	transition: all 0.3s ease; 
-}
-
-/* Changement de style au survol du bouton "Supprimer" */
-.delete-button:hover {
 	background-color: #1D6154; 
 	color: white; 
 }
+
+
+/* 
+  ================
+  STYLES DE LA GALERIE
+  ================
+*/
 
 .gallery {
 	width: 100%;
@@ -214,19 +247,30 @@ li:hover {
 .gallery img {
 	width: 100%;
 }
+
+
+/* 
+  ================
+  STYLES DE LA SECTION CONTACT
+  ================
+*/
+
 #contact {
 	width: 50%;
 	margin: auto;
 }
+
 #contact > * {
 	text-align: center;
 }
-#contact h2{
+
+#contact h2 {
 	margin-bottom: 20px;
 }
+
 #contact form {
 	text-align: left;
-	margin-top:30px;
+	margin-top: 30px;
 	display: flex;
 	flex-direction: column;
 }
@@ -237,24 +281,33 @@ li:hover {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
 #contact label {
 	margin: 2em 0 1em 0;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
 	background-color: #1D6154;
-	margin : 2em auto ;
+	margin: 2em auto;
 	width: 180px;
 	text-align: center;
-	border-radius: 60px ;
+	border-radius: 60px;
 }
+
+
+/* 
+  ================
+  STYLES DU PIED DE PAGE
+  ================
+*/
 
 footer nav ul {
 	display: flex;
@@ -262,7 +315,13 @@ footer nav ul {
 	margin: 2em;
 }
 
-/* Page de connexion */
+
+/* 
+  ================
+  STYLES DE LA PAGE DE CONNEXION
+  ================
+*/
+
 #login {
 	width: 400px;
 	margin: 100px auto;
@@ -326,7 +385,13 @@ footer nav ul {
 	text-decoration: underline;
 }
 
-/* Styles généraux de la modale */
+
+/* 
+  ================
+  STYLES GÉNÉRAUX POUR LA MODALE
+  ================
+*/
+
 .modal-wrapper {
 	background-color: white;
 	padding: 20px;
@@ -340,7 +405,6 @@ footer nav ul {
 	align-items: center;
 }
 
-/* En-tête de la modale */
 .modal-header {
 	display: flex;
 	justify-content: space-between;
@@ -369,14 +433,19 @@ footer nav ul {
 	cursor: pointer;
 }
 
-/* Icône de l'image (en dehors du bouton) */
+
+/* 
+  ================
+  STYLES POUR L'UPLOAD D'IMAGES
+  ================
+*/
+
 .upload-icon {
 	color: #888;
 	font-size: 40px;
 	margin-bottom: 15px;
 }
 
-/* Section pour le chargement des photos */
 .upload-section {
 	display: flex;
 	justify-content: space-between;
@@ -404,7 +473,6 @@ footer nav ul {
 	margin-top: 10px;
 }
 
-/* Champs de formulaire */
 #add-photo-form {
 	display: flex;
 	flex-direction: column;
@@ -434,7 +502,13 @@ footer nav ul {
 	width: 100%;
 }
 
-/* Gestion de l'affichage de la modale */
+
+/* 
+  ================
+  ANIMATIONS DE LA MODALE
+  ================
+*/
+
 .modal[aria-hidden="false"] {
 	opacity: 1;
 	pointer-events: auto;
@@ -455,37 +529,48 @@ footer nav ul {
 	transition: opacity 0.3s ease;
 }
 
-/* Ajustements pour les petits écrans */
+/* 
+  ================
+  STYLES POUR LES ICÔNES "MODIFIER" ET "SUPPRIMER"
+  ================
+*/
+
+.icon-container {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: flex;
+	gap: 10px;
+}
+
+.edit-icon, .delete-icon {
+	font-size: 18px;
+	color: #1D6154;
+	cursor: pointer;
+}
+
+.edit-icon:hover, .delete-icon:hover {
+	color: #B1663C;
+}
+
+figure {
+	position: relative;
+}
+
+
+/* 
+  ================
+  AJUSTEMENTS POUR LES PETITS ÉCRANS
+  ================
+*/
+
 @media (max-width: 600px) {
 	#login {
 		width: 90%;
 	}
 }
 
-/* Ajout des styles pour les icônes "Modifier" et "Supprimer" */
-/* Conteneur pour les icônes "Modifier" et "Supprimer" */
-.icon-container {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    gap: 10px;
-}
 
-/* Styles pour les icônes de la galerie */
-.edit-icon, .delete-icon {
-    font-size: 18px;
-    color: #1D6154; /* Couleur des icônes */
-    cursor: pointer;
-}
 
-/* Changement de couleur au survol */
-.edit-icon:hover, .delete-icon:hover {
-    color: #B1663C;
-}
 
-/* Positionnement relatif de chaque projet pour que les icônes soient bien placées */
-figure {
-    position: relative;
-}
 

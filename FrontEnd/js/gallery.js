@@ -1,212 +1,251 @@
-// URL de l'API 
+// ===========================
+// CONFIGURATION ET FETCH DES DONNÉES
+// ===========================
+
+// URL de l'API des travaux
 const apiUrl = 'http://localhost:5678/api/works';
 
-// Récupérer les travaux depuis le back-end
+// Fonction pour récupérer les travaux depuis le back-end
 async function fetchWorks() {
     try {
-        const response = await fetch(apiUrl); 
-        return await response.json();  
+        const response = await fetch(apiUrl); // Effectue la requête GET
+        return await response.json();  // Retourne les travaux sous forme d'objets JSON
     } catch (error) {
-        console.error('Erreur lors de la récupération des travaux:', error);
+        console.error('Erreur lors de la récupération des travaux:', error);  // Affiche l'erreur en cas d'échec
     }
 }
 
-// Fonction pour afficher les travaux dans la galerie avec un bouton "Supprimer" si connecté
+
+// ===========================
+// AFFICHAGE DES TRAVAUX DANS LA GALERIE
+// ===========================
+
+// Fonction pour afficher chaque travail dans la galerie
+// Si l'utilisateur est connecté, ajouter des icônes "Modifier" et "Supprimer"
 function displayWorks(item) {
-    const gallery = document.querySelector('.gallery');
-  
+    const gallery = document.querySelector('.gallery');  // Sélectionne la galerie pour afficher les travaux
+
+    // Crée l'élément figure pour chaque travail
     const figure = document.createElement('figure');
 
     const img = document.createElement('img');
-    img.src = item.imageUrl;
-    img.alt = item.title;
+    img.src = item.imageUrl;  // Définit la source de l'image du projet
+    img.alt = item.title;  // Définit l'attribut alt pour l'accessibilité
 
     const figcaption = document.createElement('figcaption');
-    figcaption.textContent = item.title;
+    figcaption.textContent = item.title;  // Affiche le titre du travail
 
     figure.appendChild(img);
     figure.appendChild(figcaption);
 
-    // Ajouter des icônes si l'utilisateur est connecté
-    const token = localStorage.getItem('token'); // Vérifier si l'utilisateur est connecté
+    // Vérifie si l'utilisateur est connecté via un token stocké dans le localStorage
+    const token = localStorage.getItem('token'); 
     if (token) {
+        // Crée un conteneur pour les icônes "Modifier" et "Supprimer"
         const iconContainer = document.createElement('div');
         iconContainer.classList.add('icon-container');
         
-        // Icône "Modifier"
+        // Ajoute l'icône "Modifier"
         const editIcon = document.createElement('i');
         editIcon.classList.add('fas', 'fa-edit', 'edit-icon');
         editIcon.title = 'Modifier';
         iconContainer.appendChild(editIcon);
 
-        // Icône "Supprimer"
+        // Ajoute l'icône "Supprimer"
         const deleteIcon = document.createElement('i');
         deleteIcon.classList.add('fas', 'fa-trash-alt', 'delete-icon');
         deleteIcon.title = 'Supprimer';
-        deleteIcon.dataset.id = item.id;
+        deleteIcon.dataset.id = item.id;  // Stocke l'ID du projet
 
-        // Ajouter l'événement de suppression
+        // Ajoute un événement de clic sur l'icône "Supprimer"
         deleteIcon.addEventListener('click', async () => {
             if (confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) {
-                await deleteWork(item.id); // Appeler la fonction de suppression
-                figure.remove(); // Retirer l'élément du DOM après suppression
+                await deleteWork(item.id);  // Supprime le travail via l'API
+                figure.remove();  // Retire l'élément du DOM après suppression
             }
         });
 
         iconContainer.appendChild(deleteIcon);
-
-        // Ajouter les icônes en haut à droite du projet
-        figure.appendChild(iconContainer);
+        figure.appendChild(iconContainer);  // Ajoute les icônes au projet
     }
 
-    gallery.appendChild(figure);
+    gallery.appendChild(figure);  // Ajoute le projet à la galerie
 }
+
+
+// ===========================
+// SUPPRESSION DES TRAVAUX
+// ===========================
 
 // Fonction pour supprimer un travail via l'API
 async function deleteWork(id) {
-    const token = localStorage.getItem('token'); // Récupérer le token pour l'authentification
+    const token = localStorage.getItem('token');  // Récupère le token pour l'authentification
     
     try {
+        // Effectue la requête DELETE pour supprimer le travail
         const response = await fetch(`${apiUrl}/${id}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${token}`, // Ajouter l'en-tête d'authentification
+                'Authorization': `Bearer ${token}`,  // Utilise le token pour autoriser l'action
                 'Content-Type': 'application/json'
             }
         });
 
         if (!response.ok) {
-            throw new Error('Erreur lors de la suppression du projet');
+            throw new Error('Erreur lors de la suppression du projet');  // Si la requête échoue
         }
 
-        console.log('Projet supprimé avec succès');
+        console.log('Projet supprimé avec succès');  // Confirmation dans la console
     } catch (error) {
-        console.error('Erreur:', error);
+        console.error('Erreur:', error);  // Affiche une erreur en cas d'échec
     }
 }
 
-// Fonction pour générer le menu de catégories
+
+// ===========================
+// GÉNÉRATION DU MENU DE CATÉGORIES
+// ===========================
+
+// Fonction pour générer dynamiquement le menu des catégories
 function generateCategoryMenu(works) {
-    const categoriesContainer = document.querySelector('.categories');
+    const categoriesContainer = document.querySelector('.categories');  // Sélectionne le conteneur des catégories
     
-    // Vider le conteneur des catégories pour éviter les doublons
-    categoriesContainer.innerHTML = '';
+    categoriesContainer.innerHTML = '';  // Vider le conteneur pour éviter les doublons
 
-    const allCategories = new Set();  
+    const allCategories = new Set();  // Utilise un Set pour éviter les doublons
 
-    // Ajouter une catégorie spéciale "Tous"
+    // Ajoute une catégorie spéciale "Tous"
     allCategories.add({ id: 0, name: "Tous" });
 
-    // Extraire les catégories des travaux en utilisant l'ID
+    // Parcourt chaque travail pour extraire les catégories
     works.forEach(work => {
         if (![...allCategories].some(category => category.id === work.category.id)) {
-            allCategories.add(work.category);
+            allCategories.add(work.category);  // Ajoute la catégorie si elle n'existe pas encore
         }
     });
 
-    // Créer un bouton pour chaque catégorie unique
+    // Crée un bouton pour chaque catégorie unique
     allCategories.forEach(category => {
         const button = document.createElement("button");
-        button.textContent = category.name;
-        button.dataset.categoryId = category.id;
+        button.textContent = category.name;  // Définit le nom de la catégorie
+        button.dataset.categoryId = category.id;  // Stocke l'ID de la catégorie
 
         if (category.id === 0) {
-            button.classList.add('active');
+            button.classList.add('active');  // Marque le bouton "Tous" comme actif par défaut
         }
 
-        // Ajouter un événement pour filtrer les travaux selon la catégorie sélectionnée
+        // Ajoute un événement de clic pour filtrer les travaux selon la catégorie sélectionnée
         button.addEventListener('click', () => {
-
             const allButtons = document.querySelectorAll('.categories button');
             
-            allButtons.forEach(btn => btn.classList.remove('active'));
-
-            // Ajouter la classe "active" au bouton cliqué
-            button.classList.add('active');
+            allButtons.forEach(btn => btn.classList.remove('active'));  // Désactive tous les boutons
+            button.classList.add('active');  // Active le bouton cliqué
             
-            // Filtrer et afficher les travaux
+            // Filtrer et afficher les travaux selon la catégorie
             if (category.id === 0) {
-                // Afficher tous les travaux
-                displayFilteredWorks(works);
+                displayFilteredWorks(works);  // Affiche tous les travaux
             } else {
-                // Filtrer les travaux selon la catégorie sélectionnée
-                const filteredWorks = works.filter(work => work.category.id === category.id);
-                displayFilteredWorks(filteredWorks);
+                const filteredWorks = works.filter(work => work.category.id === category.id);  // Filtre par catégorie
+                displayFilteredWorks(filteredWorks);  // Affiche les travaux filtrés
             }
         });
 
-        categoriesContainer.appendChild(button);
+        categoriesContainer.appendChild(button);  // Ajoute le bouton au conteneur
     });
 }
 
-// Fonction pour afficher les travaux filtrés
+
+// ===========================
+// AFFICHAGE DES TRAVAUX FILTRÉS
+// ===========================
+
+// Fonction pour afficher les travaux filtrés dans la galerie
 function displayFilteredWorks(works) {
-    const gallery = document.querySelector('.gallery');
-    gallery.innerHTML = '';  
-    works.forEach(displayWorks);  
+    const gallery = document.querySelector('.gallery');  // Sélectionne la galerie
+    gallery.innerHTML = '';  // Vide la galerie avant d'afficher les nouveaux travaux
+    works.forEach(displayWorks);  // Affiche chaque travail
 }
 
-// Charger les travaux et générer le menu de catégories
+
+// ===========================
+// CHARGEMENT DES TRAVAUX
+// ===========================
+
+// Fonction principale pour charger les travaux et générer le menu de catégories
 async function loadWorks() {
-    const works = await fetchWorks();  
-    displayFilteredWorks(works);  
-    generateCategoryMenu(works);  
+    const works = await fetchWorks();  // Récupère les travaux
+    displayFilteredWorks(works);  // Affiche les travaux dans la galerie
+    generateCategoryMenu(works);  // Génère le menu de catégories
 }
 
-// Fonction pour afficher ou masquer le bouton "modifier" en fonction de l'état de connexion
+
+// ===========================
+// GESTION DES BOUTONS DE CONNEXION
+// ===========================
+
+// Fonction pour afficher ou masquer le bouton "modifier" selon l'état de connexion
 function toggleEditButton() {
     const editButton = document.getElementById('edit-button');
     const token = localStorage.getItem('token');  // Vérifie si un token existe dans le localStorage
 
     if (token) {
         // Si le token existe, l'utilisateur est connecté => Affiche le bouton "modifier"
-        editButton.style.display = 'inline-flex';  // Affiche le bouton
+        editButton.style.display = 'inline-flex';
     } else {
         // Si le token n'existe pas, l'utilisateur n'est pas connecté => Cache le bouton
-        editButton.style.display = 'none';  // Masque le bouton
+        editButton.style.display = 'none';
     }
 }
 
-// Fonction pour mettre à jour le lien "login" ou "logout"
+
+// ===========================
+// GESTION DU LIEN "LOGIN/LOGOUT"
+// ===========================
+
+// Fonction pour mettre à jour le lien "login" ou "logout" selon l'état de connexion
 function updateAuthLink() {
     const authLink = document.getElementById('auth-link');
-  
-    // Vérifier si le token est stocké dans le localStorage
+
+    // Vérifie si un token est stocké dans le localStorage
     const token = localStorage.getItem('token');
-  
-    // Supprimer les anciens événements pour éviter les doublons
+
+    // Remplacer l'ancien lien pour éviter les doublons d'événements
     authLink.replaceWith(authLink.cloneNode(true));
     const newAuthLink = document.getElementById('auth-link');
-  
+
     if (token) {
-        // Si un token est trouvé, l'utilisateur est connecté => Afficher "logout"
+        // Si un token est trouvé, l'utilisateur est connecté => Affiche "logout"
         newAuthLink.textContent = 'logout';
-  
-        // Ajouter un événement pour gérer la déconnexion
+
+        // Ajoute un événement pour la déconnexion
         newAuthLink.addEventListener('click', function() {
-            // Supprimer le token du localStorage
-            localStorage.removeItem('token');
-  
-            // Rediriger vers la page de login après déconnexion
-            window.location.href = 'login.html';
+            localStorage.removeItem('token');  // Supprime le token
+            window.location.href = 'login.html';  // Redirige vers la page de connexion
         });
     } else {
-        // Si aucun token n'est trouvé, l'utilisateur n'est pas connecté => Afficher "login"
+        // Si aucun token n'est trouvé, l'utilisateur n'est pas connecté => Affiche "login"
         newAuthLink.textContent = 'login';
-  
-        // Ajouter un événement pour rediriger vers la page de connexion
+
+        // Ajoute un événement pour rediriger vers la page de connexion
         newAuthLink.addEventListener('click', function() {
             window.location.href = 'login.html';
         });
     }
-    toggleEditButton();  // Met à jour l'affichage du bouton "modifier" après changement de connexion
+
+    toggleEditButton();  // Met à jour l'affichage du bouton "modifier"
 }
-  
-// Appeler les fonctions lors du chargement de la page pour charger les travaux, mettre à jour le lien "login/logout" et afficher le bouton "modifier"
+
+
+// ===========================
+// INITIALISATION DU SITE
+// ===========================
+
+// Lorsque la page est chargée, exécuter les fonctions pour charger les travaux et mettre à jour les liens
 document.addEventListener('DOMContentLoaded', () => {
-    loadWorks();
-    updateAuthLink(); 
+    loadWorks();  // Charge les travaux et génère le menu de catégories
+    updateAuthLink();  // Met à jour le lien "login/logout"
 });
+
 
 
 
