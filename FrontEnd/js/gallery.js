@@ -38,37 +38,6 @@ function displayWorks(item) {
     figure.appendChild(img);
     figure.appendChild(figcaption);
 
-    // Vérifie si l'utilisateur est connecté via un token stocké dans le localStorage
-    const token = localStorage.getItem('token'); 
-    if (token) {
-        // Crée un conteneur pour les icônes "Modifier" et "Supprimer"
-        const iconContainer = document.createElement('div');
-        iconContainer.classList.add('icon-container');
-        
-        // Ajoute l'icône "Modifier"
-        const editIcon = document.createElement('i');
-        editIcon.classList.add('fas', 'fa-edit', 'edit-icon');
-        editIcon.title = 'Modifier';
-        iconContainer.appendChild(editIcon);
-
-        // Ajoute l'icône "Supprimer"
-        const deleteIcon = document.createElement('i');
-        deleteIcon.classList.add('fas', 'fa-trash-alt', 'delete-icon');
-        deleteIcon.title = 'Supprimer';
-        deleteIcon.dataset.id = item.id;  // Stocke l'ID du projet
-
-        // Ajoute un événement de clic sur l'icône "Supprimer"
-        deleteIcon.addEventListener('click', async () => {
-            if (confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) {
-                await deleteWork(item.id);  // Supprime le travail via l'API
-                figure.remove();  // Retire l'élément du DOM après suppression
-            }
-        });
-
-        iconContainer.appendChild(deleteIcon);
-        figure.appendChild(iconContainer);  // Ajoute les icônes au projet
-    }
-
     gallery.appendChild(figure);  // Ajoute le projet à la galerie
 }
 
@@ -186,14 +155,17 @@ async function loadWorks() {
 // Fonction pour afficher ou masquer le bouton "modifier" selon l'état de connexion
 function toggleEditButton() {
     const editButton = document.getElementById('edit-button');
+    const adminBar = document.getElementById('admin-bar'); // Sélection de la barre noire
     const token = localStorage.getItem('token');  // Vérifie si un token existe dans le localStorage
 
     if (token) {
-        // Si le token existe, l'utilisateur est connecté => Affiche le bouton "modifier"
+        // Si le token existe, l'utilisateur est connecté => Affiche le bouton "modifier" et la barre noire
         editButton.style.display = 'inline-flex';
+        adminBar.classList.remove('hidden');  // Affiche la barre noire
     } else {
-        // Si le token n'existe pas, l'utilisateur n'est pas connecté => Cache le bouton
+        // Si le token n'existe pas, l'utilisateur n'est pas connecté => Cache le bouton et la barre noire
         editButton.style.display = 'none';
+        adminBar.classList.add('hidden');  // Cache la barre noire
     }
 }
 
@@ -232,7 +204,7 @@ function updateAuthLink() {
         });
     }
 
-    toggleEditButton();  // Met à jour l'affichage du bouton "modifier"
+    toggleEditButton();  // Met à jour l'affichage du bouton "modifier" et la barre noire
 }
 
 
@@ -245,6 +217,26 @@ document.addEventListener('DOMContentLoaded', () => {
     loadWorks();  // Charge les travaux et génère le menu de catégories
     updateAuthLink();  // Met à jour le lien "login/logout"
 });
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
 
 
 

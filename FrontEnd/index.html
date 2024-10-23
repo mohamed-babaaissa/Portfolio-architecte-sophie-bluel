@@ -13,13 +13,17 @@
     
 </head>
 <body>
+    <div id="admin-bar" class="hidden">
+        <p><i class="fas fa-edit"></i> Mode édition</p>
+    </div>
+    
 <header>
     <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
     <nav>
         <ul>
             <li><a href="index.html">projets</a></li>
             <li><a href="index.html#contact">contact</a></li>
-            <li id="auth-link">login</li>
+            <li id="auth-link"><login class="html"></login></li>
             <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
         </ul>
     </nav>
@@ -68,36 +72,56 @@
     </section>
 
     <!-- Modale pour la gestion des travaux -->
-    <aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display: none;">
-        <div class="modal-wrapper js-modal-stop">
-            <div class="modal-header">
-                <button class="back-button"><i class="fas fa-arrow-left"></i></button>
-                <h1 id="titlemodal">Ajout photo</h1>
-                <button class="js-modal-close"><i class="fas fa-times"></i></button>
-            </div>
-
-            <div class="modal-body">
-                
-                <div class="upload-section">
-                    <i class="fas fa-image upload-icon"></i> 
-                    <button class="upload-button">
-                        + Ajouter photo
-                    </button>
-                    <p class="file-info">jpg, png : 4mo max</p>
-                </div>
-
-                <form id="add-photo-form">
-                    <label for="title-input">Titre</label>
-                    <input type="text" id="title-input" placeholder="Titre" required>
-
-                    <label for="category-input">Catégorie</label>
-                    <input type="text" id="category-input" placeholder="Catégorie" required>
-
-                    <button type="submit" class="submit-button">Valider</button>
-                </form>
-            </div>
+    
+<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display: none;">
+    <div class="modal-wrapper js-modal-stop">
+        <div class="modal-header">
+            <button class="back-button" style="display: none;"><i class="fas fa-arrow-left"></i></button>
+            <h1 id="titlemodal">Galerie photo</h1>
+            <button class="js-modal-close"><i class="fas fa-times"></i></button>
         </div>
-    </aside>
+
+        <!-- Etape 1: Galerie photo -->
+        <div class="modal-body" id="gallery-section">
+            <div class="galleryModal">
+                <!-- Images dynamiquement générées ici par JavaScript -->
+                
+            </div>
+            <button class="upload-button">Ajouter une photo</button>
+        </div>
+
+        <!-- Etape 2: Ajout de nouveaux projets -->
+        <div class="modal-body hidden" id="new-project-section" style="display: none;">
+            <div class="upload-section">
+                <i class="fas fa-image upload-icon"></i>
+                <!-- Conteneur pour l'image sélectionnée -->
+                <img class="selected-upload-image" style="display: none;" alt="Image sélectionnée" />
+                
+                <!-- Input pour ajouter des photos -->
+                <input type="file" id="file-input" accept="image/*" style="display: none;" />
+                <button class="upload-button" id="add-photo-btn">+ Ajouter photo</button>
+                
+                <p class="file-info">jpg, png : 4mo max</p>
+            </div>
+            <form id="add-photo-form">
+                <label for="title-input">Titre</label>
+                <input type="text" id="title-input" placeholder="Titre" required>
+            
+                <label for="category-select">Catégorie</label>
+                <select id="category-select" required>
+                    <!-- Les catégories seront ajoutées ici dynamiquement -->
+                </select>
+            
+                <button type="submit" class="submit-button">Valider</button>
+            </form>
+            
+        </div>
+        
+        
+
+    </div>
+</aside>
+
 </main>
 
 <footer>
@@ -108,9 +132,13 @@
     </nav>
 </footer>
 <script src="js/gallery.js"></script>
+
 <script src="js/modal.js"></script>
 </body>
 </html>
+
+
+
 
 
 
