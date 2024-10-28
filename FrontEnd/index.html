@@ -9,21 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <meta name="description" content="">
-    <link rel="stylesheet" href="./assets/style.css">
+    <link rel="stylesheet" href="./assets/styles/style.css">
     
 </head>
 <body>
     <div id="admin-bar" class="hidden">
         <p><i class="fas fa-edit"></i> Mode édition</p>
     </div>
+       
     
 <header>
     <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
     <nav>
         <ul>
-            <li><a href="index.html">projets</a></li>
+            <li><a href="index.html#portfolio">projets</a></li>
             <li><a href="index.html#contact">contact</a></li>
-            <li id="auth-link"><login class="html"></login></li>
+            <li id="auth-link"><a href="login.html"></a></li>
             <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
         </ul>
     </nav>
@@ -81,13 +82,17 @@
             <button class="js-modal-close"><i class="fas fa-times"></i></button>
         </div>
 
+            <!-- Barre de notification dans la modale -->
+            <p id="notification-bar"></p>
+
+
         <!-- Etape 1: Galerie photo -->
         <div class="modal-body" id="gallery-section">
             <div class="galleryModal">
                 <!-- Images dynamiquement générées ici par JavaScript -->
                 
             </div>
-            <button class="upload-button">Ajouter une photo</button>
+            <button class="upload-button upload-button-gallery">Ajouter une photo</button>
         </div>
 
         <!-- Etape 2: Ajout de nouveaux projets -->
@@ -99,7 +104,7 @@
                 
                 <!-- Input pour ajouter des photos -->
                 <input type="file" id="file-input" accept="image/*" style="display: none;" />
-                <button class="upload-button" id="add-photo-btn">+ Ajouter photo</button>
+                <button class="upload-button upload-button-new-project" id="add-photo-btn">+ Ajouter photo</button>
                 
                 <p class="file-info">jpg, png : 4mo max</p>
             </div>
@@ -132,6 +137,7 @@
     </nav>
 </footer>
 <script src="js/gallery.js"></script>
+<script src="js/login.js"></script>
 
 <script src="js/modal.js"></script>
 </body>

@@ -1,0 +1,816 @@
+/*
+================
+RESET CSS DE BASE
+================
+Réinitialisation des styles pour avoir une base cohérente entre tous les navigateurs
+ */
+
+/* Suppression des marges, paddings, et bordures par défaut pour tous les éléments communs */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+margin: 0;  /* Supprime toutes les marges */
+padding: 0; /* Supprime tous les padding */
+border: 0;  /* Supprime les bordures */
+font-size: 100%; /* Assure que les éléments conservent leur taille par défaut */
+font: inherit; /* Hérite de la police de l'élément parent */
+vertical-align: baseline; /* Aligne verticalement les éléments à leur ligne de base */
+}
+
+/* HTML5 display-role reset pour les anciens navigateurs */
+/* S'assure que les nouveaux éléments HTML5 sont reconnus comme des blocs par les anciens navigateurs */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+display: block;
+}
+
+/* Réinitialisation de la hauteur de ligne pour tout le document */
+body {
+line-height: 1;
+}
+
+/* Suppression des puces pour les listes ordonnées et non-ordonnées */
+ol, ul {
+list-style: none;
+}
+
+/* Suppression des guillemets automatiques pour les citations */
+blockquote, q {
+quotes: none;
+}
+
+/* Suppression des guillemets pour les citations dans certains navigateurs */
+blockquote:before, blockquote:after,
+q:before, q:after {
+content: ''; /* Retire le contenu généré automatiquement */
+}
+
+/* Réinitialisation des tableaux pour une mise en page plus propre */
+table {
+border-collapse: collapse; /* Supprime l'espace entre les cellules */
+border-spacing: 0; /* Supprime les espaces entre les cellules */
+}
+
+
+/* 
+================
+STYLES DU ADMIN BAR
+================
+Barre d'administration en haut de la page
+*/
+
+/* Affiche une barre noire avec du texte blanc en haut de la page */
+#admin-bar {
+background-color: black;
+color: white;
+text-align: center; /* Centrer le texte */
+margin: 0; /* Supprime toute marge */
+padding: 10px; /* Ajoute un padding de 10px */
+font-size: 14px; /* Définit la taille du texte */
+position: absolute; /* Positionne la barre en haut de la page */
+top: 0; /* L'aligne au sommet de la page */
+left: 0; /* La colle sur le côté gauche */
+width: 100%; /* Prend toute la largeur */
+}
+
+/* Ajuste la taille de l'icône dans la barre d'admin */
+#admin-bar i {
+	font-size: 14px;
+}
+
+/* Cache les éléments avec la classe .hidden */
+.hidden {
+display: none;
+}
+
+/* 
+================
+STYLES DE BASE DU SITE
+================
+Mise en page de base du site, gestion des largeurs et des marges
+*/
+
+/* Contrainte la largeur du contenu à 1140px et centre le contenu */
+body {
+max-width: 1140px; /* Limite la largeur du contenu */
+margin: auto; /* Centre le contenu */
+font-family: 'Work Sans'; /* Applique la police de caractères */
+font-size: 14px; /* Définit la taille par défaut des textes */
+}
+
+/* Header affiché en flexbox pour séparer les éléments à gauche et à droite */
+header {
+display: flex;
+justify-content: space-between; /* Éloigne les éléments de chaque côté */
+margin: 50px 0; /* Ajoute un espace vertical de 50px */
+}
+
+/* Ajout de marges verticales pour les sections */
+section {
+margin: 50px 0;
+}
+
+/* Styles pour le titre principal avec une couleur personnalisée */
+h1 {
+display: flex;
+flex-direction: column; /* Arrange le texte verticalement */
+font-family: 'Syne'; /* Police personnalisée */
+font-size: 22px;
+font-weight: 800; /* Définit une épaisseur de texte */
+color: #B1663C; /* Couleur du texte */
+}
+
+/* Sous-titre en bas du h1 avec espacement des lettres */
+h1 > span {
+font-family: 'Work Sans'; /* Police différente pour le sous-titre */
+font-size: 10px; /* Taille du texte plus petite */
+letter-spacing: 0.1em; /* Espacement entre les lettres */
+}
+
+/* Sous-titres (h2) avec une taille plus grande et une couleur verte */
+h2 {
+font-family: 'Syne'; /* Police du titre */
+font-weight: 700; /* Définit une épaisseur du texte */
+font-size: 30px; /* Augmente la taille du texte */
+color: #1D6154; /* Définit la couleur verte */
+}
+
+/* Styles pour les éléments de la navigation */
+nav ul {
+display: flex;
+align-items: center; /* Centre verticalement les éléments */
+
+}
+
+/* Retire le soulignement et la couleur bleue des liens dans le header */
+header nav a {
+	text-decoration: none; /* Retire le soulignement */
+	color: inherit; /* Applique la couleur de texte par défaut du conteneur */
+	cursor: pointer; /* Change le curseur en pointeur au survol */
+
+}
+
+header nav a:hover {
+	color: #B1663C; /* Change la couleur au survol (par exemple, en marron) */
+}
+
+/* Style pour le lien actif dans la navigation */
+nav a.active {
+	font-weight: bold; /* Met le texte en gras */
+	color: #1D6154; /* Change la couleur pour indiquer la page active */
+}
+
+
+
+/* 
+================
+STYLES DE NAVIGATION ET DES BOUTONS
+================
+Styles pour les boutons et la navigation
+*/
+
+/* Bouton d'édition avec une icône intégrée */
+.edit-button {
+font-size: 10px;
+color: #000; /* Couleur noire */
+text-decoration: none; /* Supprime le soulignement */
+cursor: pointer;
+display: inline-flex;
+align-items: center;
+margin-left: 10px;
+}
+
+/* Taille de l'icône dans le bouton */
+.edit-button i {
+font-size: 10px;
+margin-right: 5px; /* Ajoute un espace entre l'icône et le texte */
+}
+
+/* Couleur du texte au survol */
+.edit-button:hover {
+color: #B1663C; /* Change la couleur au survol */
+}
+
+/* Espacement des éléments de navigation */
+nav li {
+padding: 0 10px;
+font-size: 1.2em; /* Augmente la taille du texte */
+}
+
+/* Changement de couleur des éléments de navigation au survol */
+li:hover {
+color: #B1663C; /* Change la couleur au survol */
+}
+
+/* 
+================
+STYLES DE LA SECTION INTRODUCTION
+================
+Mise en page de la section d'introduction
+*/
+
+/* Introduction affichée en flexbox pour centrer verticalement les éléments */
+#introduction {
+display: flex;
+align-items: center; /* Centre verticalement les éléments */
+}
+
+/* La figure prend toute la largeur disponible dans la section */
+#introduction figure {
+flex: 1; /* Prend tout l'espace disponible */
+}
+
+/* Image centrée et prenant 80% de la largeur */
+#introduction img {
+display: block;
+margin: auto; /* Centre horizontalement l'image */
+width: 80%; /* Limite la taille de l'image à 80% */
+}
+
+/* Article dans la section introduction prenant également toute la largeur disponible */
+#introduction article {
+flex: 1; /* Prend également tout l'espace disponible */
+}
+
+/* Marge inférieure pour le titre de l'introduction */
+#introduction h2 {
+margin-bottom: 1em; /* Ajoute une marge en bas */
+}
+
+/* Marges inférieures pour les paragraphes dans l'introduction */
+#introduction p {
+margin-bottom: 0.5em;
+}
+
+/* 
+================
+STYLES DE LA SECTION PORTFOLIO
+================
+Styles spécifiques pour la section portfolio
+*/
+
+/* Titre de la section portfolio centré */
+#portfolio h2 {
+text-align: center;
+margin-bottom: 1em; /* Ajoute une marge en bas */
+}
+
+/* 
+================
+STYLES DES BOUTONS DE FILTRES
+================
+Boutons de filtre pour les projets dans la section portfolio
+*/
+
+/* Affichage en flexbox des boutons de filtre, avec un espace de 15px entre chaque bouton */
+.categories {
+display: flex;
+justify-content: center; /* Centre les boutons horizontalement */
+gap: 15px; /* Espace de 15px entre les boutons */
+margin-bottom: 20px; /* Ajoute une marge en bas */
+}
+
+/* Styles de base des boutons de filtre avec bordures arrondies */
+.categories button {
+background-color: transparent; /* Fond transparent */
+border: 2px solid #1D6154; /* Bordure verte */
+color: #1D6154; /* Texte vert */
+font-family: 'Work Sans', sans-serif;
+font-size: 1.1em;
+padding: 10px 20px;
+border-radius: 50px; /* Bordures arrondies */
+cursor: pointer;
+transition: all 0.3s ease; /* Animation fluide sur les changements d'état */
+}
+
+/* Couleur de fond et de texte changée au survol */
+.categories button:hover {
+background-color: #1D6154; /* Fond vert */
+color: white; /* Texte blanc */
+}
+
+/* Bouton actif avec une couleur de fond verte et texte blanc */
+.categories button.active {
+background-color: #1D6154; /* Fond vert */
+color: white; /* Texte blanc */
+}
+
+/* 
+================
+STYLES DE LA GALERIE
+================
+Affichage des projets dans une grille
+*/
+
+/* Grille pour afficher les images en 3 colonnes, avec un espace de 20px entre les colonnes et les lignes */
+.gallery {
+width: 100%;
+display: grid;
+grid-template-columns: 1fr 1fr 1fr; /* 3 colonnes de tailles égales */
+grid-column-gap: 20px; /* Espacement horizontal entre les colonnes */
+grid-row-gap: 20px; /* Espacement vertical entre les lignes */
+}
+
+/* Chaque image occupe toute la largeur de sa colonne */
+.gallery img {
+width: 100%;
+}
+
+/* 
+================
+STYLES DE LA SECTION CONTACT
+================
+Mise en page du formulaire de contact
+*/
+
+/* Formulaire de contact centré avec une largeur de 50% */
+#contact {
+width: 50%; /* Largeur du formulaire */
+margin: auto; /* Centre horizontalement le formulaire */
+}
+
+/* Centre tous les éléments de la section contact */
+#contact > * {
+text-align: center;
+}
+
+/* Titre du formulaire avec une marge inférieure de 20px */
+#contact h2 {
+margin-bottom: 20px;
+}
+
+/* Formulaire avec une organisation en colonne et texte aligné à gauche */
+#contact form {
+text-align: left;
+margin-top: 30px;
+display: flex;
+flex-direction: column;
+}
+
+/* Champs de saisie avec une hauteur de 50px et une ombre subtile */
+#contact input {
+height: 50px;
+font-size: 1.2em;
+border: none;
+box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+/* Marges pour les labels des champs */
+#contact label {
+margin: 2em 0 1em 0;
+}
+
+/* Zone de texte avec un design similaire aux champs d'entrée */
+#contact textarea {
+border: none;
+box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+/* Bouton de soumission avec une bordure arrondie et fond vert */
+input[type="submit"] {
+font-family: 'Syne';
+font-weight: 700;
+color: white;
+background-color: #1D6154; /* Vert foncé */
+margin: 2em auto;
+width: 180px;
+text-align: center;
+border-radius: 60px;
+}
+
+/* 
+================
+STYLES DU PIED DE PAGE
+================
+Mise en page du pied de page
+*/
+
+/* Liste du pied de page alignée à droite */
+footer nav ul {
+display: flex;
+justify-content: flex-end; /* Aligne la liste à droite */
+margin: 2em; /* Ajoute un espace autour du pied de page */
+}
+
+/* 
+================
+STYLES DE LA PAGE DE CONNEXION
+================
+Styles spécifiques pour la page de connexion
+*/
+
+/* Formulaire de connexion centré avec une largeur de 400px */
+#login {
+width: 400px;
+margin: 100px auto;
+text-align: center;
+}
+
+/* Titre du formulaire de connexion */
+#login h2 {
+font-family: 'Syne', sans-serif;
+font-size: 30px;
+color: #1D6154;
+margin-bottom: 30px;
+}
+
+/* Organisation du formulaire en colonne */
+#login form {
+display: flex;
+flex-direction: column;
+}
+
+/* Labels du formulaire avec texte aligné à gauche */
+#login label {
+text-align: left;
+font-size: 1.2em;
+margin-bottom: 10px;
+color: #333;
+}
+
+/* Champs de saisie avec une ombre légère et une taille adaptée */
+#login input[type="email"],
+#login input[type="password"] {
+height: 50px;
+font-size: 1.2em;
+border: none;
+box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+margin-bottom: 20px;
+padding: 0 15px;
+}
+
+/* Bouton de soumission stylé avec bordures arrondies */
+#login input[type="submit"] {
+font-family: 'Syne', sans-serif;
+font-weight: 700;
+color: white;
+background-color: #1D6154;
+width: 180px;
+height: 50px;
+text-align: center;
+border-radius: 60px;
+margin: 30px auto;
+cursor: pointer;
+}
+
+/* Couleur changeante au survol du bouton de soumission */
+#login input[type="submit"]:hover {
+background-color: #B1663C; /* Change la couleur au survol */
+}
+
+/* Styles pour le lien de récupération de mot de passe */
+#forgot-password {
+font-size: 0.9em;
+color: #1D6154;
+text-decoration: none;
+}
+
+/* Couleur et soulignement au survol du lien de récupération */
+#forgot-password:hover {
+color: #B1663C;
+text-decoration: underline;
+}
+
+/* 
+================
+STYLES GÉNÉRAUX POUR LA MODALE
+================
+Styles de la fenêtre modale
+*/
+/* Styles par défaut pour cacher la modale */
+.modal {
+position: fixed;
+display: flex;
+align-items: center;
+justify-content: center;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+
+opacity: 0;
+transition: opacity 0.3s ease; /* Transition douce lors de l'ouverture et la fermeture */
+}
+
+
+
+/* Enveloppe de la modale avec un fond blanc et bordures arrondies */
+.modal-wrapper {
+background-color: white;
+padding: 20px;
+border-radius: 10px;
+width: 80%;
+max-width: 600px;
+position: relative;
+box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+display: flex;
+flex-direction: column;
+
+}
+
+/* Ajustement de la largeur et centrage des sections de la modale */
+.modal-body {
+display: flex;
+justify-content: center;
+width: 80%; /* Utilise toute la largeur disponible de la modale */
+max-width: 700px; /* Limite la largeur maximale */
+margin: 0 auto; /* Centre chaque page horizontalement */
+flex-direction: column;
+align-items: center; /* Centre le contenu verticalement */
+}
+
+/* En-tête de la modale avec boutons à gauche et à droite */
+.modal-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+}
+
+/* Titre de la modale */
+.modal-header h1 {
+font-size: 18px;
+text-align: center;
+justify-content: center;
+color: black;
+margin: 20px auto;
+}
+
+/* Bouton de retour dans la modale */
+.back-button {
+background: none;
+border: none;
+font-size: 18px;
+cursor: pointer;
+}
+
+/* Bouton pour fermer la modale */
+.js-modal-close {
+background: none;
+border: none;
+font-size: 15px;
+cursor: pointer;
+}
+
+
+/* 
+================
+STYLES POUR L'UPLOAD D'IMAGES
+================
+Styles de la section d'ajout d'images
+*/
+
+/* Icône d'upload stylisée avec une couleur grise */
+.upload-icon {
+color: #888;
+font-size: 80px;
+}
+
+/* Section d'upload avec des bordures arrondies et un fond gris clair */
+.upload-section {
+display: flex;
+justify-content: space-between;
+flex-direction: column;
+text-align: center;
+margin-bottom: 20px;
+padding: 0; /* Retire le padding pour permettre à l'image de couvrir toute la section */
+background-color: #f0f0f0;
+border-radius: 8px;
+position: relative; /* Permet à l'image de se superposer */
+height: 200px; /* Ajuste la hauteur de la section selon les besoins */
+align-items: center;
+justify-content: center;
+}
+
+/* Style pour l'image sélectionnée dans la section d'upload */
+.selected-upload-image {
+width: 100%; /* L'image prend toute la largeur de la section */
+height: 100%; /* L'image prend toute la hauteur de la section */
+object-fit: cover; /* L'image couvre l'espace sans se déformer */
+border-radius: 8px; /* Garde les coins arrondis */
+position: absolute; /* Positionne l'image au-dessus de la section */
+top: 0;
+left: 0;
+z-index: 1; /* Place l'image au-dessus des autres éléments */
+}
+
+/* Assure que les autres éléments restent en arrière-plan */
+.upload-icon,
+.upload-button,
+.file-info {
+z-index: 0;
+}
+
+.upload-button {
+font-family: 'Syne', sans-serif;
+font-weight: 700; /* Utilisation d'une police plus épaisse pour plus de lisibilité */
+color: white;
+margin: 15px auto;
+padding: 10px 30px; /* Ajustement des paddings pour augmenter la taille */
+text-align: center;
+border-radius: 30px; /* Bordures arrondies pour un look similaire à celui de l'image */
+border: none; /* Suppression des bordures */
+cursor: pointer;
+transition: background-color 0.3s ease; /* Transition pour l'effet au survol */
+}
+
+/* Style au survol */
+.upload-button:hover {
+background-color: #134939; /* Changement de couleur pour l’effet au survol */
+}
+
+/* Styles spécifiques pour le bouton de la galerie */
+.upload-button-gallery {
+/* Ajoutez ici les styles spécifiques pour ce bouton */
+background-color: #1D6154;
+font-size: 16px;
+}
+
+/* Styles spécifiques pour le bouton d'ajout de nouveaux projets */
+.upload-button-new-project {
+/* Ajoutez ici les styles spécifiques pour ce bouton */
+background-color: #A7A7A7;
+font-size: 14px;
+}
+
+
+
+
+/* Formulaire d'ajout d'image organisé en colonne */
+#add-photo-form {
+display: flex;
+flex-direction: column;
+margin: auto;
+gap: 15px;
+width: 100%;
+}
+
+/* Labels pour le formulaire d'ajout d'image */
+#add-photo-form label {
+font-size: 1.2em;
+color: #333;
+}
+
+/* Champs de texte dans le formulaire avec bordures arrondies */
+#add-photo-form input[type="text"],
+#add-photo-form select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	margin-bottom: 20px;
+	padding: 0 15px;
+	border-radius: 5px;
+	background-color: white;
+}
+
+
+/* Bouton de validation de la soumission avec une couleur grise */
+.submit-button {
+font-family: 'Syne', sans-serif;
+font-weight: 700; /* Utilisation d'une police plus épaisse pour plus de lisibilité */
+color: white;
+background-color: #A7A7A7;
+margin: 2em auto;
+padding: 10px 30px; /* Ajustement des paddings pour augmenter la taille */
+text-align: center;
+border-radius: 30px; /* Bordures arrondies pour un look similaire à celui de l'image */
+border: none; /* Suppression des bordures */
+cursor: pointer;
+transition: background-color 0.3s ease; /* Transition pour l'effet au survol */
+}
+
+.submit-button:hover {
+background-color: #134939; /* Changement de couleur pour l’effet au survol */
+}
+
+/* 
+================
+ANIMATIONS DE LA MODALE
+================
+Transitions pour l'affichage de la modale
+*/
+
+/* Transition d'opacité pour afficher la modale */
+.modal[aria-hidden="false"] {
+opacity: 1;
+pointer-events: auto;
+transition: opacity 0.3s ease;
+}
+
+
+
+/* 
+================
+STYLES DE LA GALERIE MODALE
+================
+*/
+
+/* Grille de la galerie dans la modale */
+.galleryModal {
+display: grid;
+grid-template-columns: repeat(5, 1fr) ; /* 5 images par ligne */
+grid-gap: 15px ;
+justify-items: center ; /* Centre chaque image dans sa cellule */
+max-width: 100%; /* Limite la largeur totale */
+overflow: hidden; /* Empêche les éléments de déborder */
+padding-bottom: 20px;
+}
+
+/* Taille des images dans la modale */
+.galleryModal img {
+width: 100px ;
+max-width: 100%;
+height: 120px ;
+object-fit: cover  /* Assure que l'image remplit bien son espace sans déformation */
+}
+
+/* 
+================
+STYLES DE LA NOTIFICATION DANS LA MODALE
+================
+Affichage de la barre de notification pour les actions (succès ou erreur)
+*/
+
+/* Styles de base pour le texte de notification */
+#notification-bar {
+text-align: center;
+font-size: 16px;
+display: none; /* Masqué par défaut */
+margin: 10px 0;
+}
+
+#notification-bar.success {
+color: #1D6154; /* Vert pour le succès */
+}
+
+#notification-bar.error {
+color: #B1663C; /* Rouge pour l'erreur */
+}
+
+
+
+/* Style pour le bouton de suppression */
+.delete-icon {
+position: absolute;
+top: 5px;
+right: 5px;
+background-color: rgba(0, 0, 0, 0.7); /* Fond noir semi-transparent */
+color: white;
+border: none;
+border-radius: 5px;
+padding: 5px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.delete-icon i {
+font-size: 10px; /* Ajuste la taille de l'icône */
+}
+
+
+
+
+/* 
+================
+AJUSTEMENTS POUR LES PETITS ÉCRANS
+================
+Responsivité pour les petits écrans
+*/
+
+/* Ajuste la largeur du formulaire de connexion pour les écrans inférieurs à 600px */
+@media (max-width: 600px) {
+#login {
+	width: 90%;
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

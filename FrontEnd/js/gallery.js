@@ -2,127 +2,86 @@
 // CONFIGURATION ET FETCH DES DONNÉES
 // ===========================
 
-// URL de l'API des travaux
-const apiUrl = 'http://localhost:5678/api/works';
+const apiUrl = 'http://localhost:5678/api/works';  // URL de l'API pour récupérer les travaux
 
-// Fonction pour récupérer les travaux depuis le back-end
+// Fonction asynchrone pour récupérer les travaux depuis l'API
 async function fetchWorks() {
     try {
-        const response = await fetch(apiUrl); // Effectue la requête GET
-        return await response.json();  // Retourne les travaux sous forme d'objets JSON
+        const response = await fetch(apiUrl);  // Effectue une requête GET vers l'API
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);  // Vérifie la réponse HTTP
+        return await response.json();  // Convertit la réponse en JSON et la retourne
     } catch (error) {
-        console.error('Erreur lors de la récupération des travaux:', error);  // Affiche l'erreur en cas d'échec
+        console.error('Erreur lors de la récupération des travaux:', error);  // Affiche une erreur si la requête échoue
     }
 }
-
 
 // ===========================
 // AFFICHAGE DES TRAVAUX DANS LA GALERIE
 // ===========================
 
-// Fonction pour afficher chaque travail dans la galerie
-// Si l'utilisateur est connecté, ajouter des icônes "Modifier" et "Supprimer"
+// Fonction pour afficher chaque travail dans l'élément de galerie
 function displayWorks(item) {
-    const gallery = document.querySelector('.gallery');  // Sélectionne la galerie pour afficher les travaux
+    const gallery = document.querySelector('.gallery');  // Sélectionne l'élément de la galerie
+    if (!gallery) {
+        console.warn("L'élément '.gallery' n'a pas été trouvé.");  // Affiche un avertissement si la galerie n'existe pas
+        return;
+    }
 
-    // Crée l'élément figure pour chaque travail
-    const figure = document.createElement('figure');
-
+    const figure = document.createElement('figure');  // Crée un élément figure pour chaque travail
     const img = document.createElement('img');
-    img.src = item.imageUrl;  // Définit la source de l'image du projet
-    img.alt = item.title;  // Définit l'attribut alt pour l'accessibilité
+    img.src = item.imageUrl;  // Définie l'URL de l'image du travail
+    img.alt = item.title;  // Définie le texte alternatif de l'image
 
     const figcaption = document.createElement('figcaption');
-    figcaption.textContent = item.title;  // Affiche le titre du travail
+    figcaption.textContent = item.title;  // Ajoute le titre du travail
 
     figure.appendChild(img);
     figure.appendChild(figcaption);
-
-    gallery.appendChild(figure);  // Ajoute le projet à la galerie
+    gallery.appendChild(figure);  // Ajoute chaque travail dans la galerie
 }
-
-
-// ===========================
-// SUPPRESSION DES TRAVAUX
-// ===========================
-
-// Fonction pour supprimer un travail via l'API
-async function deleteWork(id) {
-    const token = localStorage.getItem('token');  // Récupère le token pour l'authentification
-    
-    try {
-        // Effectue la requête DELETE pour supprimer le travail
-        const response = await fetch(`${apiUrl}/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`,  // Utilise le token pour autoriser l'action
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Erreur lors de la suppression du projet');  // Si la requête échoue
-        }
-
-        console.log('Projet supprimé avec succès');  // Confirmation dans la console
-    } catch (error) {
-        console.error('Erreur:', error);  // Affiche une erreur en cas d'échec
-    }
-}
-
 
 // ===========================
 // GÉNÉRATION DU MENU DE CATÉGORIES
 // ===========================
 
-// Fonction pour générer dynamiquement le menu des catégories
+// Fonction pour générer dynamiquement le menu de catégories pour les travaux
 function generateCategoryMenu(works) {
     const categoriesContainer = document.querySelector('.categories');  // Sélectionne le conteneur des catégories
-    
-    categoriesContainer.innerHTML = '';  // Vider le conteneur pour éviter les doublons
+    if (!categoriesContainer) {
+        console.warn("L'élément '.categories' n'a pas été trouvé.");  // Avertit si le conteneur de catégories n'existe pas
+        return;
+    }
 
-    const allCategories = new Set();  // Utilise un Set pour éviter les doublons
+    categoriesContainer.innerHTML = '';  // Vide le conteneur des catégories
+    const allCategories = new Set([{ id: 0, name: "Tous" }]);  // Initialise un Set avec la catégorie "Tous"
 
-    // Ajoute une catégorie spéciale "Tous"
-    allCategories.add({ id: 0, name: "Tous" });
-
-    // Parcourt chaque travail pour extraire les catégories
+    // Parcours chaque travail et ajoute sa catégorie dans le Set s'il n'est pas déjà présent
     works.forEach(work => {
         if (![...allCategories].some(category => category.id === work.category.id)) {
-            allCategories.add(work.category);  // Ajoute la catégorie si elle n'existe pas encore
+            allCategories.add(work.category);  // Ajoute les catégories sans doublon
         }
     });
 
-    // Crée un bouton pour chaque catégorie unique
+    // Crée un bouton pour chaque catégorie
     allCategories.forEach(category => {
         const button = document.createElement("button");
-        button.textContent = category.name;  // Définit le nom de la catégorie
-        button.dataset.categoryId = category.id;  // Stocke l'ID de la catégorie
-
-        if (category.id === 0) {
-            button.classList.add('active');  // Marque le bouton "Tous" comme actif par défaut
-        }
+        button.textContent = category.name;
+        button.dataset.categoryId = category.id;
+        if (category.id === 0) button.classList.add('active');  // Marque la catégorie "Tous" comme active par défaut
 
         // Ajoute un événement de clic pour filtrer les travaux selon la catégorie sélectionnée
         button.addEventListener('click', () => {
-            const allButtons = document.querySelectorAll('.categories button');
-            
-            allButtons.forEach(btn => btn.classList.remove('active'));  // Désactive tous les boutons
-            button.classList.add('active');  // Active le bouton cliqué
-            
-            // Filtrer et afficher les travaux selon la catégorie
-            if (category.id === 0) {
-                displayFilteredWorks(works);  // Affiche tous les travaux
-            } else {
-                const filteredWorks = works.filter(work => work.category.id === category.id);  // Filtre par catégorie
-                displayFilteredWorks(filteredWorks);  // Affiche les travaux filtrés
-            }
+            document.querySelectorAll('.categories button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Filtre les travaux par catégorie sélectionnée
+            const filteredWorks = category.id === 0 ? works : works.filter(work => work.category.id === category.id);
+            displayFilteredWorks(filteredWorks);
         });
 
-        categoriesContainer.appendChild(button);  // Ajoute le bouton au conteneur
+        categoriesContainer.appendChild(button);  // Ajoute chaque bouton au conteneur des catégories
     });
 }
-
 
 // ===========================
 // AFFICHAGE DES TRAVAUX FILTRÉS
@@ -130,11 +89,15 @@ function generateCategoryMenu(works) {
 
 // Fonction pour afficher les travaux filtrés dans la galerie
 function displayFilteredWorks(works) {
-    const gallery = document.querySelector('.gallery');  // Sélectionne la galerie
-    gallery.innerHTML = '';  // Vide la galerie avant d'afficher les nouveaux travaux
-    works.forEach(displayWorks);  // Affiche chaque travail
-}
+    const gallery = document.querySelector('.gallery');  // Sélectionne la galerie pour afficher les travaux
+    if (!gallery) {
+        console.warn("L'élément '.gallery' n'a pas été trouvé.");  // Avertit si la galerie n'existe pas
+        return;
+    }
 
+    gallery.innerHTML = '';  // Vide la galerie avant d'afficher les travaux filtrés
+    works.forEach(displayWorks);  // Affiche chaque travail en utilisant la fonction displayWorks
+}
 
 // ===========================
 // CHARGEMENT DES TRAVAUX
@@ -143,80 +106,75 @@ function displayFilteredWorks(works) {
 // Fonction principale pour charger les travaux et générer le menu de catégories
 async function loadWorks() {
     const works = await fetchWorks();  // Récupère les travaux
+    if (!works) {
+        console.warn("Aucun travail n'a été récupéré.");  // Avertit si aucun travail n'est récupéré
+        return;
+    }
     displayFilteredWorks(works);  // Affiche les travaux dans la galerie
     generateCategoryMenu(works);  // Génère le menu de catégories
 }
-
 
 // ===========================
 // GESTION DES BOUTONS DE CONNEXION
 // ===========================
 
-// Fonction pour afficher ou masquer le bouton "modifier" selon l'état de connexion
+// Fonction pour afficher ou masquer le bouton "modifier" et la barre admin selon l'état de connexion
 function toggleEditButton() {
-    const editButton = document.getElementById('edit-button');
-    const adminBar = document.getElementById('admin-bar'); // Sélection de la barre noire
-    const token = localStorage.getItem('token');  // Vérifie si un token existe dans le localStorage
-
-    if (token) {
-        // Si le token existe, l'utilisateur est connecté => Affiche le bouton "modifier" et la barre noire
-        editButton.style.display = 'inline-flex';
-        adminBar.classList.remove('hidden');  // Affiche la barre noire
-    } else {
-        // Si le token n'existe pas, l'utilisateur n'est pas connecté => Cache le bouton et la barre noire
-        editButton.style.display = 'none';
-        adminBar.classList.add('hidden');  // Cache la barre noire
+    const editButton = document.getElementById('edit-button');  // Sélectionne le bouton "modifier"
+    const adminBar = document.getElementById('admin-bar');  // Sélectionne la barre admin
+    if (!editButton || !adminBar) {
+        console.warn("L'un des éléments 'edit-button' ou 'admin-bar' n'a pas été trouvé.");  // Avertit si un des éléments n'est pas trouvé
+        return;
     }
-}
 
+    const token = localStorage.getItem('token');  // Récupère le token de connexion
+    editButton.style.display = token ? 'inline-flex' : 'none';  // Affiche le bouton si connecté
+    adminBar.classList.toggle('hidden', !token);  // Affiche la barre admin si connecté
+}
 
 // ===========================
 // GESTION DU LIEN "LOGIN/LOGOUT"
 // ===========================
 
-// Fonction pour mettre à jour le lien "login" ou "logout" selon l'état de connexion
+// Fonction pour mettre à jour le lien d'authentification "login" ou "logout"
 function updateAuthLink() {
-    const authLink = document.getElementById('auth-link');
-
-    // Vérifie si un token est stocké dans le localStorage
-    const token = localStorage.getItem('token');
-
-    // Remplacer l'ancien lien pour éviter les doublons d'événements
-    authLink.replaceWith(authLink.cloneNode(true));
-    const newAuthLink = document.getElementById('auth-link');
-
-    if (token) {
-        // Si un token est trouvé, l'utilisateur est connecté => Affiche "logout"
-        newAuthLink.textContent = 'logout';
-
-        // Ajoute un événement pour la déconnexion
-        newAuthLink.addEventListener('click', function() {
-            localStorage.removeItem('token');  // Supprime le token
-            window.location.href = 'login.html';  // Redirige vers la page de connexion
-        });
-    } else {
-        // Si aucun token n'est trouvé, l'utilisateur n'est pas connecté => Affiche "login"
-        newAuthLink.textContent = 'login';
-
-        // Ajoute un événement pour rediriger vers la page de connexion
-        newAuthLink.addEventListener('click', function() {
-            window.location.href = 'login.html';
-        });
+    const authLink = document.getElementById('auth-link');  // Sélectionne le lien d'authentification
+    if (!authLink) {
+        console.warn("L'élément 'auth-link' n'a pas été trouvé.");  // Avertit si le lien d'authentification n'est pas trouvé
+        return;
     }
 
-    toggleEditButton();  // Met à jour l'affichage du bouton "modifier" et la barre noire
-}
+    const token = localStorage.getItem('token');  // Récupère le token de connexion
+    authLink.replaceWith(authLink.cloneNode(true));  // Remplace le lien pour éviter les doublons d'événements
+    const newAuthLink = document.getElementById('auth-link');
 
+    // Modifie le texte du lien selon l'état de connexion et ajoute les événements
+    newAuthLink.textContent = token ? 'logout' : 'login';
+    newAuthLink.addEventListener('click', function() {
+        if (token) {
+            localStorage.removeItem('token');  // Supprime le token en cas de déconnexion
+            window.location.href = 'login.html';  // Redirige vers la page de connexion
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
+
+    toggleEditButton();  // Met à jour l'affichage du bouton "modifier" et de la barre admin
+}
 
 // ===========================
 // INITIALISATION DU SITE
 // ===========================
 
-// Lorsque la page est chargée, exécuter les fonctions pour charger les travaux et mettre à jour les liens
+// Lorsque la page est complètement chargée, exécute les fonctions de chargement
 document.addEventListener('DOMContentLoaded', () => {
     loadWorks();  // Charge les travaux et génère le menu de catégories
-    updateAuthLink();  // Met à jour le lien "login/logout"
+    updateAuthLink();  // Met à jour le lien d'authentification
 });
+
+
+
+
 
 
 
