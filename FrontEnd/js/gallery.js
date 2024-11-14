@@ -172,6 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAuthLink();  // Met à jour le lien d'authentification
 });
 
+// Supprime le token du localStorage lorsque la page est fermée
+window.addEventListener('beforeunload', () => {
+    localStorage.removeItem('token');
+});
+
 
 
 

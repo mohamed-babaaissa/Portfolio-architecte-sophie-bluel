@@ -42,10 +42,10 @@ document.addEventListener('DOMContentLoaded', function () { // Attends que le DO
     const openModal = function (e) { // Déclare la fonction pour ouvrir la modale
         e.preventDefault(); // Empêche le comportement par défaut de l'élément cliqué
 
-        modal = document.querySelector(e.target.getAttribute('href')); // Récupère l'élément modale ciblé par le lien
+        modal = document.querySelector('#modal1'); // Récupère l'élément modale ciblé par le lien
         if (!modal) return; // Vérifie si la modale existe, sinon stoppe la fonction
 
-        history.pushState({ modalOpen: true }, null, window.location.href); // Ajoute un état dans l'historique de navigation
+        // history.pushState({ modalOpen: true }, null, window.location.href); // Ajoute un état dans l'historique de navigation
         modal.style.display = 'block'; // Affiche la modale en la rendant visible
         modal.style.pointerEvents = 'auto'; // Active les événements pour la modale
         modal.style.opacity = '1'; // Rend la modale complètement opaque
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function () { // Attends que le DO
     
         setTimeout(() => { // Cache la barre après 5 secondes
             notificationBar.style.display = 'none';
-        }, 5000);
+        }, 10000);
     }
 });
 

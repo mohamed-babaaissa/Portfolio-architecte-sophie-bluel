@@ -507,12 +507,19 @@ transition: opacity 0.3s ease; /* Transition douce lors de l'ouverture et la fer
 
 /* Enveloppe de la modale avec un fond blanc et bordures arrondies */
 .modal-wrapper {
+	position: fixed;
+  inset: 0px;
+  width: 80%;
+
+  max-width: 100vw;
+  max-height: 100dvh;
+  margin: auto;
 background-color: white;
 padding: 20px;
 border-radius: 10px;
-width: 80%;
-max-width: 600px;
-position: relative;
+
+max-width: 600px; 
+
 box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 display: flex;
 flex-direction: column;
@@ -525,7 +532,7 @@ display: flex;
 justify-content: center;
 width: 80%; /* Utilise toute la largeur disponible de la modale */
 max-width: 700px; /* Limite la largeur maximale */
-margin: 0 auto; /* Centre chaque page horizontalement */
+margin: auto; /* Centre chaque page horizontalement */
 flex-direction: column;
 align-items: center; /* Centre le contenu verticalement */
 }
@@ -632,7 +639,7 @@ background-color: #134939; /* Changement de couleur pour l’effet au survol */
 
 /* Styles spécifiques pour le bouton de la galerie */
 .upload-button-gallery {
-/* Ajoutez ici les styles spécifiques pour ce bouton */
+display: block;
 background-color: #1D6154;
 font-size: 16px;
 }
