@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function () { // Attends que le DO
     const selectedImagePreview = document.querySelector('.selected-upload-image'); // Aperçu de l'image sélectionnée
     const uploadIcon = document.querySelector('.upload-icon'); // Icône de téléchargement affichée par défaut
     const categorySelect = document.getElementById('category-select'); // Sélecteur de catégories pour les projets
+    const addProjectForm = document.getElementById('add-photo-form');// Récupération du formulaire d'ajout de projet
+
 
     // ===========================
     // GESTION DU BOUTON D'AJOUT DE PHOTO
@@ -138,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () { // Attends que le DO
 
     const previousStep = function () { // Retourne à la section Galerie dans la modale
         resetSelection(); // Réinitialise la sélection d'image
+        fileInput.value = ''; // Réinitialise le champ de fichier pour permettre une nouvelle sélection
         document.getElementById('new-project-section').style.display = 'none'; // Masque la section d'ajout de projet
         document.getElementById('gallery-section').style.display = 'block'; // Affiche la section Galerie
         document.querySelector('.back-button').style.display = 'none'; // Masque le bouton de retour
@@ -191,68 +194,117 @@ document.addEventListener('DOMContentLoaded', function () { // Attends que le DO
         deleteButton.classList.add('delete-icon');
         deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
                         
-        deleteButton.addEventListener('click', async () => { // Ajoute la suppression du projet au clic sur le bouton
+        deleteButton.addEventListener('click', async () => {
             if (confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) {
-                await deleteWork(photo.id);
-                figure.remove();
-                removeFromMainGallery(photo.imageUrl);
-                showNotification('Projet supprimé avec succès !', 'success');
+                await deleteWork(photo.id, photo.imageUrl); // Passez l'URL et l'ID ici
             }
         });
+        
 
         figure.appendChild(deleteButton); // Ajoute le bouton de suppression au projet
         galleryContainer.appendChild(figure); // Ajoute le projet complet à la galerie modale
     };
 
     // ===========================
+// FONCTION POUR AJOUTER UN PROJET À LA GALERIE PRINCIPALE
+// ===========================
+
+const addProjectToMainGallery = function (photo) { // Ajoute dynamiquement un projet à la galerie principale
+    const mainGallery = document.querySelector('.gallery'); // Sélectionne la galerie principale
+    const figure = document.createElement('figure'); // Crée un nouvel élément figure
+
+    const img = document.createElement('img'); // Crée un élément img
+    img.src = photo.imageUrl; // Définit la source de l'image
+    img.alt = photo.title; // Définit l'attribut alt de l'image
+    figure.appendChild(img); // Ajoute l'image au figure
+
+    const figcaption = document.createElement('figcaption'); // Crée un élément figcaption
+    figcaption.textContent = photo.title; // Définit le texte du figcaption
+    figure.appendChild(figcaption); // Ajoute le figcaption au figure
+
+    mainGallery.appendChild(figure); // Ajoute le nouvel élément figure à la galerie principale
+};
+
+
+    // ===========================
     // FONCTION POUR RETIRER UN PROJET DE LA GALERIE PRINCIPALE
     // ===========================
 
-    function removeFromMainGallery(imageUrl) { // Retire un projet de la galerie principale selon l'image
+    function removeFromMainGallery(imageUrl) {
         const mainGallery = document.querySelector('.gallery');
-        mainGallery.querySelectorAll('figure').forEach(mainFigure => {
-            const mainImage = mainFigure.querySelector('img');
-            if (mainImage.src === imageUrl) mainFigure.remove();
+        mainGallery.querySelectorAll('figure').forEach(figure => {
+            const image = figure.querySelector('img');
+            if (image.src === imageUrl) {
+                figure.remove(); // Supprime la figure correspondante
+            }
         });
-    }
+    };
+
+    // ===========================
+// FONCTION POUR RETIRER UN PROJET DE LA MODALE
+// ===========================
+
+function removeFromModalGallery(imageUrl) {
+    const galleryModal = document.querySelector('.galleryModal');
+    galleryModal.querySelectorAll('figure').forEach(figure => {
+        const image = figure.querySelector('img');
+        if (image.src === imageUrl) {
+            figure.remove(); // Supprime la figure correspondante
+        }
+    });
+};
+    
 
     // ===========================
     // SUPPRESSION DES TRAVAUX
     // ===========================
 
-    async function deleteWork(id) { // Fonction pour supprimer un projet selon son ID
-        const token = localStorage.getItem('token'); // Récupère le token d'authentification
+    async function deleteWork(id, imageUrl) { // Ajout de `imageUrl` pour identifier directement l'image
+        const token = localStorage.getItem('token'); // Récupère le token (si connecté)
         try {
+            // Supprime le projet depuis l'API
             const response = await fetch(`http://localhost:5678/api/works/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+                    ...(token && { 'Authorization': `Bearer ${token}` }), // Token seulement si connecté
+                    'Content-Type': 'application/json',
+                },
             });
-            if (!response.ok) throw new Error('Erreur lors de la suppression du projet');
+    
+            if (!response.ok) throw new Error('Erreur lors de la suppression du projet.');
+    
+            // Suppression réussie, mise à jour des deux galeries
+            removeFromModalGallery(imageUrl); // Retire de la modale
+            removeFromMainGallery(imageUrl); // Retire de la galerie principale
+
+        // Recharge la galerie principale depuis l'API
+        if (typeof reloadMainGallery === 'function') {
+            reloadMainGallery();
+        }
+            showNotification('Projet supprimé avec succès !', 'success');
         } catch (error) {
-            console.error('Erreur:', error);
+            console.error('Erreur lors de la suppression du projet:', error);
+            showNotification('Erreur lors de la suppression du projet.', 'error');
         }
     }
+    
 
     // ===========================
     // AJOUT DE NOUVEAUX PROJETS
     // ===========================
 
-    const addProjectForm = document.getElementById('add-photo-form'); // Récupère le formulaire d'ajout de projet
-    
     addProjectForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-
-        const titleInput = document.getElementById('title-input'); // Récupère le champ de titre du formulaire
-        const categoryInput = document.getElementById('category-select'); // Récupère le champ de catégorie du formulaire
-        const fileInput = document.querySelector('#file-input'); // Récupère le champ d'upload d'image
-
-        if (!titleInput.value.trim() || !categoryInput.value || !fileInput.files.length) { // Vérifie que tous les champs sont remplis
+    
+        const titleInput = document.getElementById('title-input');
+        const categoryInput = document.getElementById('category-select');
+        const fileInput = document.querySelector('#file-input');
+    
+        if (!titleInput.value.trim() || !categoryInput.value || !fileInput.files.length) {
             showNotification("Veuillez remplir tous les champs et ajouter une image.", 'error');
             return;
         }
+    
 
         const formData = new FormData(); // Crée un FormData pour les données du formulaire
         formData.append('title', titleInput.value.trim());
@@ -274,6 +326,7 @@ document.addEventListener('DOMContentLoaded', function () { // Attends que le DO
 
             const newProject = await response.json(); // Transforme la réponse en JSON pour récupérer le nouveau projet
             addProjectToGallery(newProject); // Ajoute le projet à la galerie
+            addProjectToMainGallery(newProject); // Ajoute à la galerie principale (appel existant ou fonction similaire)
             showNotification('Projet ajouté avec succès !', 'success');
 
             fileInput.value = ''; // Vide le champ d'upload d'image

@@ -261,16 +261,19 @@ Styles spécifiques pour la section portfolio
 
 /* Titre de la section portfolio centré */
 #portfolio h2 {
+justify-content: center;
 text-align: center;
-margin-bottom: 1em; /* Ajoute une marge en bas */
+margin: 2em auto; /* Ajoute une marge en bas */
 }
 
-/* 
-================
-STYLES DES BOUTONS DE FILTRES
-================
-Boutons de filtre pour les projets dans la section portfolio
-*/
+/* Conteneur parent pour centrer les éléments */
+.center-container {
+	display: flex; /* Active Flexbox */
+	justify-content: center; /* Centre horizontalement */
+	align-items: center; /* Centre verticalement */
+}
+
+
 
 /* Affichage en flexbox des boutons de filtre, avec un espace de 15px entre chaque bouton */
 .categories {
@@ -288,6 +291,7 @@ color: #1D6154; /* Texte vert */
 font-family: 'Work Sans', sans-serif;
 font-size: 1.1em;
 padding: 10px 20px;
+margin: 0 10px;
 border-radius: 50px; /* Bordures arrondies */
 cursor: pointer;
 transition: all 0.3s ease; /* Animation fluide sur les changements d'état */
@@ -587,7 +591,6 @@ font-size: 80px;
 /* Section d'upload avec des bordures arrondies et un fond gris clair */
 .upload-section {
 display: flex;
-justify-content: space-between;
 flex-direction: column;
 text-align: center;
 margin-bottom: 20px;
@@ -602,11 +605,11 @@ justify-content: center;
 
 /* Style pour l'image sélectionnée dans la section d'upload */
 .selected-upload-image {
-width: 100%; /* L'image prend toute la largeur de la section */
+width: 40%; /* L'image prend toute la largeur de la section */
 height: 100%; /* L'image prend toute la hauteur de la section */
 object-fit: cover; /* L'image couvre l'espace sans se déformer */
 border-radius: 8px; /* Garde les coins arrondis */
-position: absolute; /* Positionne l'image au-dessus de la section */
+position: relative; /* Positionne l'image au-dessus de la section */
 top: 0;
 left: 0;
 z-index: 1; /* Place l'image au-dessus des autres éléments */

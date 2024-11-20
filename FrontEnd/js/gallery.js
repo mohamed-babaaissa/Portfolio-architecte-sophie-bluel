@@ -12,6 +12,7 @@ async function fetchWorks() {
         return await response.json();  // Convertit la réponse en JSON et la retourne
     } catch (error) {
         console.error('Erreur lors de la récupération des travaux:', error);  // Affiche une erreur si la requête échoue
+        return []; // Retourne un tableau vide en cas d'erreur
     }
 }
 
@@ -122,7 +123,8 @@ async function loadWorks() {
 function toggleEditButton() {
     const editButton = document.getElementById('edit-button');  // Sélectionne le bouton "modifier"
     const adminBar = document.getElementById('admin-bar');  // Sélectionne la barre admin
-    if (!editButton || !adminBar) {
+    const categoriesBar = document.querySelector('.categories'); // Sélectionne la barre des catégories
+    if (!editButton || !adminBar || !categoriesBar) {
         console.warn("L'un des éléments 'edit-button' ou 'admin-bar' n'a pas été trouvé.");  // Avertit si un des éléments n'est pas trouvé
         return;
     }
@@ -130,6 +132,44 @@ function toggleEditButton() {
     const token = localStorage.getItem('token');  // Récupère le token de connexion
     editButton.style.display = token ? 'inline-flex' : 'none';  // Affiche le bouton si connecté
     adminBar.classList.toggle('hidden', !token);  // Affiche la barre admin si connecté
+    categoriesBar.style.display = token ? 'none' : 'block';  // Masque la barre des catégories si connecté
+}
+
+// ===========================
+// GESTION DE LA GALERIE PRINCIPALE
+// ===========================
+
+// Fonction pour recharger la galerie principale
+function reloadMainGallery() {
+    const mainGallery = document.querySelector('.gallery');
+    if (!mainGallery) {
+        console.warn("L'élément '.gallery' n'a pas été trouvé.");
+        return;
+    }
+
+    mainGallery.innerHTML = ''; // Vide la galerie principale
+
+    fetch('http://localhost:5678/api/works') // Requête vers l'API
+        .then(response => {
+            if (!response.ok) throw new Error(`Erreur HTTP! Statut: ${response.status}`);
+            return response.json();
+        })
+        .then(works => {
+            works.forEach(work => {
+                const figure = document.createElement('figure');
+                const img = document.createElement('img');
+                img.src = work.imageUrl;
+                img.alt = work.title;
+
+                const figcaption = document.createElement('figcaption');
+                figcaption.textContent = work.title;
+
+                figure.appendChild(img);
+                figure.appendChild(figcaption);
+                mainGallery.appendChild(figure);
+            });
+        })
+        .catch(error => console.error('Erreur lors du rechargement de la galerie principale :', error));
 }
 
 // ===========================
@@ -160,22 +200,33 @@ function updateAuthLink() {
     });
 
     toggleEditButton();  // Met à jour l'affichage du bouton "modifier" et de la barre admin
-}
+};
+
+// ===========================
+// NAVIGATION ARRIÈRE
+// ===========================
+
+// Détecte les clics sur "Précédent" et recharge les galeries
+window.addEventListener('popstate', () => {
+    reloadMainGallery(); // Recharge la galerie principale
+  
+});
+
+
 
 // ===========================
 // INITIALISATION DU SITE
 // ===========================
 
 // Lorsque la page est complètement chargée, exécute les fonctions de chargement
-document.addEventListener('DOMContentLoaded', () => {
-    loadWorks();  // Charge les travaux et génère le menu de catégories
-    updateAuthLink();  // Met à jour le lien d'authentification
+document.addEventListener('DOMContentLoaded', async () => {
+        loadWorks();
+        updateAuthLink();
+        
 });
 
-// Supprime le token du localStorage lorsque la page est fermée
-window.addEventListener('beforeunload', () => {
-    localStorage.removeItem('token');
-});
+
+
 
 
 
