@@ -146,6 +146,16 @@ document.addEventListener('DOMContentLoaded', function () { // Attends que le DO
         document.querySelector('.back-button').style.display = 'none'; // Masque le bouton de retour
         document.getElementById('titlemodal').textContent = 'Galerie photo'; // Modifie le titre de la modale
         currentStep = 1; // Retourne à l'étape initiale
+
+           // Réinitialise le champ de texte du titre
+    const titleInput = document.getElementById('title-input'); // Sélectionne le champ de texte
+    if (titleInput) {
+        titleInput.value = ''; // Vide le champ de texte
+    }
+
+    // Supprime l'aperçu de l'image et masque son affichage
+    selectedImagePreview.src = ''; // Supprime l'aperçu de l'image
+    selectedImagePreview.style.display = 'none'; // Masque l'aperçu
     };
 
     const showGalleryStep = function () { // Affiche l'étape Galerie dans la modale
